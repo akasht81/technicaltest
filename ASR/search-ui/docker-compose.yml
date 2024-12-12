@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  search-ui:
+    image: nginx:alpine
+    container_name: search-ui
+    ports:
+      - 3000:80
+    volumes:
+      - ./build:/usr/share/nginx/html
+    networks:
+      - search
+networks:
+  search:
+    driver: bridge
