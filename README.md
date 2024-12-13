@@ -43,3 +43,9 @@ checking indexing
 curl http://localhost:9200/cv-transcriptions/_search?pretty
 
 curl "http://localhost:9200/cv-transcriptions/_search?pretty&size=20" - to show more than 10 which is the default
+
+
+yarn install
+yarn run build 
+yarn start
+/mnt/c/Users/akash/Documents/GitHub/technicaltest/ASR/search-ui/node_modules$ yarn add @elastic/search-ui @elastic/react-search-ui @elastic/react-search-ui-views -W
