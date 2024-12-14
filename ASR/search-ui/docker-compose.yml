@@ -1,14 +1,24 @@
 version: "3.7"
+
 services:
   search-ui:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: search-ui
     ports:
-      - 3000:80
-    volumes:
-      - ./build:/usr/share/nginx/html
+      - "3000:80"
     networks:
-      - search
+      - search-ui-network
+      - elastic
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 networks:
-  search:
+  search-ui-network:
+    driver: bridge
+  elastic:
     driver: bridge
