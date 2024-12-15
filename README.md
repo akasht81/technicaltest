@@ -79,6 +79,12 @@ Persistent storage for Elasticsearch data and logs, ensuring that data is not lo
 
 A single network named elastic is defined using the default bridge driver. All services connect to this network, ensuring they can communicate.
 
+## Task 5 :
+
+I am unable to do task 5 in time due to my lacking of understanding of azure web services. I have tried to push the docker compose file to the web services and also made it use containers from my docker hub repo however I am unable to deploy my web application. I am not sure why I am unable to view the docker logs as well to see what is wrong as I am unable to download the proper logs from kudu as well. The logs seem to show that the images are being pulled from the container registry properly however it doesnt run the multi containers properly.
+
+![alt text](image-4.png)
+
 ## Trouble shooting steps used by me, not relevant to setup : 
 
 docker logs es01
