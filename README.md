@@ -6,6 +6,8 @@ Conda environment creation :
 
 conda create --name takehometest python=3.9
 conda activate takehometest
+
+clone this repo and cd into the main directory
 pip install -r requirements.txt
 
 verify all the files are install by using : pip list
@@ -17,18 +19,19 @@ conda deactivate
 conda remove --name takehometest --all
 
 
-
-Task 0 
+For the first task related to asr_api.py to run the application : 
 
 running application : uvicorn asr_api:app --host 0.0.0.0 --port 8001
 
-Task 1 
+Open another cmd and type this in :
 
 curl -F "file=@C:\\Users\\akash\\Documents\\GitHub\\technicaltest\\ASR\\cv-valid-dev\\cv-valid-dev\\sample-000000.mp3" http://localhost:8001/asr
 
 results : 
 
 {"transcription":"SHE COMPOSED AN EMOTIONAL SONG IN HER BEDROOM","duration":"3.2"}
+
+![alt text](image.png)
 
 Task 2 
 
