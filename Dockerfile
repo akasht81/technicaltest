@@ -4,24 +4,24 @@ FROM node:18-alpine
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Copy package files first
+# Copy package.json and yarn.lock
 COPY package.json yarn.lock ./
 
-# Install dependencies
+# Install dependencies using Yarn
 RUN yarn install
 
 # Copy the rest of the application code
 COPY . .
 
-# Build the React application
+# Build the application using Yarn
 RUN yarn build
 
-# Use Nginx to serve the built static files
+# Use a lightweight web server for serving the static files
 FROM nginx:alpine
 COPY --from=0 /usr/src/app/build /usr/share/nginx/html
 
-# Expose the default Nginx port
+# Expose the default port for the Nginx server
 EXPOSE 3000
 
-# Start Nginx
+# Start the Nginx server
 CMD ["nginx", "-g", "daemon off;"]

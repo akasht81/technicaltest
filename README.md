@@ -1,10 +1,22 @@
 # technicaltest
 
-conda environment :
+I created a conda environment to run the project in. 
 
+Conda environment creation : 
+
+conda create --name takehometest python=3.9
 conda activate takehometest
+pip install -r requirements.txt
 
-Python 3.9.20
+verify all the files are install by using : pip list
+
+
+Once you are done using the environment :
+
+conda deactivate
+conda remove --name takehometest --all
+
+
 
 Task 0 
 

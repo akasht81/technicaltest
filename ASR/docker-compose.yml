@@ -1,0 +1,101 @@
+version: "3.7"  # Specify the Docker Compose file format version
+
+services:  # Define the services in the Docker Compose setup
+
+  # Frontend Service (Search UI for Elasticsearch)
+  search-ui:
+    # build:
+    #   context: ./search-ui  # Path to the Dockerfile for the search-ui
+    image: lmaozedonghehe/asr-search-ui:latest  # Custom Docker image for the Search UI
+    container_name: search-ui  # Name of the container
+    ports:
+      - "3000:80"  # Map port 80 inside the container to port 3000 on the host
+    networks:
+      - elastic  # Connects to the `elastic` network to interact with Elasticsearch services
+    depends_on:  # Ensure these services are healthy before starting search-ui
+      es01:
+        condition: service_healthy
+      es02:
+        condition: service_healthy
+    healthcheck:  # Configure health checks for the service
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 10s  # Check health every 10 seconds
+      timeout: 5s  # Timeout for the health check
+      retries: 3  # Retry up to 3 times before considering the service unhealthy
+
+  # Backend Service: Elasticsearch Cluster - Node 1
+  es01:
+    image: lmaozedonghehe/custom-elasticsearch:latest  # Custom Docker image for Elasticsearch
+    container_name: es01  # Name of the Elasticsearch node
+    environment:  # Environment variables for Elasticsearch configuration
+      - node.name=es01  # Name of this node
+      - cluster.name=cv-transcriptions-cluster  # Cluster name
+      - discovery.seed_hosts=es02  # Other nodes to discover
+      - cluster.initial_master_nodes=es01,es02  # Initial master nodes for the cluster
+      - bootstrap.memory_lock=true  # Prevent memory swapping
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # Set JVM heap size
+      - xpack.security.enabled=false  # Disable security for simplicity
+      - http.cors.enabled=true  # Enable CORS
+      - http.cors.allow-origin="http://localhost:3000"  # Allow CORS from the Search UI
+    volumes:  # Persistent storage for Elasticsearch data and logs
+      - es01-data:/usr/share/elasticsearch/data  # Volume for data storage
+      - es01-logs:/usr/share/elasticsearch/logs  # Volume for logs
+    ports:
+      - "9200:9200"  # Map Elasticsearch's port 9200 to the host
+    networks:
+      - elastic  # Connect to the `elastic` network
+    restart: always  # Restart the service if it stops
+    healthcheck:  # Configure health checks for the service
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend Service: Elasticsearch Cluster - Node 2
+  es02:
+    image: lmaozedonghehe/custom-elasticsearch:latest  # Custom Docker image for Elasticsearch
+    container_name: es02  # Name of the Elasticsearch node
+    environment:  # Environment variables for Elasticsearch configuration
+      - node.name=es02  # Name of this node
+      - cluster.name=cv-transcriptions-cluster  # Cluster name
+      - discovery.seed_hosts=es01  # Other nodes to discover
+      - bootstrap.memory_lock=true  # Prevent memory swapping
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # Set JVM heap size
+      - xpack.security.enabled=false  # Disable security for simplicity
+      - http.cors.enabled=true  # Enable CORS
+      - http.cors.allow-origin="http://localhost:3000"  # Allow CORS from the Search UI
+    volumes:  # Persistent storage for Elasticsearch data and logs
+      - es02-data:/usr/share/elasticsearch/data  # Volume for data storage
+      - es02-logs:/usr/share/elasticsearch/logs  # Volume for logs
+    networks:
+      - elastic  # Connect to the `elastic` network
+    restart: always  # Restart the service if it stops
+    healthcheck:  # Configure health checks for the service
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Elastic Backend Service (Runs custom scripts, e.g., indexing)
+  elastic-backend:
+    build: ./elastic-backend  # Path to the Dockerfile for the backend
+    container_name: elastic-backend  # Name of the container
+    networks:
+      - elastic  # Connects to the `elastic` network
+    depends_on:  # Ensure these services are healthy before starting the backend
+      es01:
+        condition: service_healthy
+      es02:
+        condition: service_healthy
+
+# Volumes for persistent storage
+volumes:
+  es01-data:  # Data volume for Elasticsearch node 1
+  es01-logs:  # Logs volume for Elasticsearch node 1
+  es02-data:  # Data volume for Elasticsearch node 2
+  es02-logs:  # Logs volume for Elasticsearch node 2
+
+# Network configuration
+networks:
+  elastic:  # Define a single network for all services to communicate
+    driver: bridge  # Use the default bridge driver for networking
