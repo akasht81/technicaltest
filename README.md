@@ -63,7 +63,23 @@ You can also use the search function accordingly :
 
 ![alt text](image-3.png)
 
-Trouble shooting steps used by me, not relevant to setup : 
+
+Search UI is the frontend service.
+
+We use lmaozedonghehe/asr-search-ui:latest as the image for the react application. Port 80 is mapped from inside the container to 3000 on the host. The UI then can be accessed via http://localhost:3000.
+
+We do health checks on the elasticsearch nodes before starting. We ensure the UI service is running by making a simple HTTP request (curl -f http://localhost).
+
+es01 is the first node in an elasticsearch cluster. lmaozedonghehe/custom-elasticsearch:latest is a custom Elasticsearch Docker image used which was created by me. 
+
+Acts as the second node in the Elasticsearch cluster.
+Details: Identical to es01, except for the node name (node.name=es02). It uses the same configuration to join the cluster with es01.
+
+Persistent storage for Elasticsearch data and logs, ensuring that data is not lost when containers restart.
+
+A single network named elastic is defined using the default bridge driver. All services connect to this network, ensuring they can communicate.
+
+## Trouble shooting steps used by me, not relevant to setup : 
 
 docker logs es01
 docker logs es02
