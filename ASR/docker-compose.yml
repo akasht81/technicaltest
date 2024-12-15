@@ -33,7 +33,8 @@ services:  # Define the services in the Docker Compose setup
       - discovery.seed_hosts=es02  # Other nodes to discover
       - cluster.initial_master_nodes=es01,es02  # Initial master nodes for the cluster
       - bootstrap.memory_lock=true  # Prevent memory swapping
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # Set JVM heap size
+      # - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # Set JVM heap size
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"  # Allocate 2GB of heap memory
       - xpack.security.enabled=false  # Disable security for simplicity
       - http.cors.enabled=true  # Enable CORS
       - http.cors.allow-origin="http://localhost:3000"  # Allow CORS from the Search UI
@@ -60,7 +61,8 @@ services:  # Define the services in the Docker Compose setup
       - cluster.name=cv-transcriptions-cluster  # Cluster name
       - discovery.seed_hosts=es01  # Other nodes to discover
       - bootstrap.memory_lock=true  # Prevent memory swapping
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # Set JVM heap size
+      # - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # Set JVM heap size
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"  # Allocate 2GB of heap memory
       - xpack.security.enabled=false  # Disable security for simplicity
       - http.cors.enabled=true  # Enable CORS
       - http.cors.allow-origin="http://localhost:3000"  # Allow CORS from the Search UI
