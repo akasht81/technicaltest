@@ -1,4 +1,4 @@
-# technicaltest
+### technicaltest
 
 I created a conda environment to run the project in. 
 
@@ -18,6 +18,7 @@ Once you are done using the environment :
 conda deactivate
 conda remove --name takehometest --all
 
+## Task 1 :
 
 For the first task related to asr_api.py to run the application : 
 
@@ -33,19 +34,37 @@ results :
 
 ![alt text](image.png)
 
-Task 2 
+## Task 2 :
 
 python cv-decode.py
 
-Task 3 
+After running this a new column will be formed in the new csv file called cv-valid-dev-updated.csv 
+
+## Task 3 : 
+
+After dockerizing the application, you can run it this way to do task 1.
 
 docker build -t asr-api .
 docker run -p 8001:8001 --name asr-api-container asr-api
 
-Task 4
+## Task 4 : 
 
-docker-compose up -d
-docker ps
+docker-compose build, to build the multi-container consisting of the elastic search container as well as the search ui container
+docker-compose up -d once built
+open your browser and type http://localhost:3000
+
+![alt text](image-1.png)
+
+You can also use the filter function as shown below :
+
+![alt text](image-2.png)
+
+You can also use the search function accordingly :
+
+![alt text](image-3.png)
+
+Trouble shooting steps used by me, not relevant to setup : 
+
 docker logs es01
 docker logs es02
 curk http://localhost:9200
@@ -58,7 +77,6 @@ checking indexing
 curl http://localhost:9200/cv-transcriptions/_search?pretty
 
 curl "http://localhost:9200/cv-transcriptions/_search?pretty&size=20" - to show more than 10 which is the default
-
 
 yarn install
 yarn run build 
