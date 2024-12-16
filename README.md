@@ -17,6 +17,8 @@ Once you are done using the environment :
 conda deactivate
 conda remove --name takehometest --all
 
+Download docker desktop as well to allow dockerfile and docker-compose file builds
+
 ## Task 1 :
 
 For the first task related to asr_api.py to run the application :
@@ -35,6 +37,8 @@ results :
 
 ## Task 2 :
 
+Dataset download link to get the cv-valid-dev : https://www.kaggle.com/datasets/mozillaorg/common-voice
+
 python cv-decode.py
 
 After running this a new column will be formed in the new csv file called cv-valid-dev-updated.csv
@@ -47,6 +51,11 @@ docker build -t asr-api .
 docker run -p 8001:8001 --name asr-api-container asr-api
 
 ## Task 4 :
+
+elastic search ui understanding links used:
+
+https://docs.elastic.co/search-ui/overview
+https://www.elastic.co/guide/en/search-ui/current/tutorials-elasticsearch.html
 
 docker-compose build, to build the multi-container consisting of the elastic search container as well as the search ui container
 docker-compose up -d once built
